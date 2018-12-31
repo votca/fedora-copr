@@ -51,7 +51,7 @@ BuildRequires:  gromacs
 BuildRequires:  gromacs-openmpi
 BuildRequires:  openmpi-devel
 BuildRequires:  python2
-%if 0%{?fedora} <= 28
+%if 0%{?fedora} >= 29
 BuildRequires:  python-unversioned-command
 %endif
 BuildRequires:  gnuplot
