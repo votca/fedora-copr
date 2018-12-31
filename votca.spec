@@ -16,6 +16,8 @@ Source4:        https://github.com/votca/csg-manual/archive/v%{version}%{?_rc}.t
 Source5:        https://github.com/votca/csgapps/archive/v%{version}%{?_rc}.tar.gz#/%{name}-csgapps-%{version}%{?_rc}.tar.gz
 Source6:        https://github.com/votca/xtp/archive/v%{version}%{?_rc}.tar.gz#/%{name}-xtp-%{version}%{?_rc}.tar.gz
 
+Patch0:         https://patch-diff.githubusercontent.com/raw/votca/xtp/pull/191.diff
+
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
 BuildRequires:  expat-devel
@@ -48,7 +50,10 @@ BuildRequires:  ghostscript-tools-dvipdf
 BuildRequires:  gromacs
 BuildRequires:  gromacs-openmpi
 BuildRequires:  openmpi-devel
-
+BuildRequires:  python2
+BuildRequires:  python-unversioned-command
+BuildRequires:  gnuplot
+BuildRequires:  octave
 
 %description
 Versatile Object-oriented Toolkit for Coarse-graining Applications (VOTCA) is
@@ -76,22 +81,30 @@ for i in tools csg csg-tutorials csg-manual csgapps xtp; do
   rmdir $i && mv $i-%{version}%{?_rc} $i;
 done
 sed -i -e '1s@env python@python3@' -e '/default=1e-5/s/1e-5/2e-5/g' tools/scripts/votca_compare.in
+%patch0 -d xtp -p1
 
 %build
+
+#bug in inkscape https://github.com/votca/xtp/issues/189
+%ifnarch s390x aarch64
+%global CMAKE_OPTS -DBUILD_XTP_MANUAL=ON
+%endif
+
 %_openmpi_load
 mkdir %{_target_platform}
 pushd %{_target_platform}
-%{cmake} .. -DLIB=%{_lib} -DCMAKE_BUILD_TYPE=Release -DWITH_RC_FILES=OFF -DENABLE_TESTING=ON -DBUILD_CSGAPPS=ON -DBUILD_CSG_MANUAL=ON -DBUILD_XTP=ON -DBUILD_XTP_MANUAL=ON -DENABLE_REGRESSION_TESTING=ON
+%{cmake3} .. -DCMAKE_BUILD_TYPE=Release -DWITH_RC_FILES=OFF -DENABLE_TESTING=ON -DBUILD_CSGAPPS=ON -DBUILD_CSG_MANUAL=ON -DBUILD_XTP=ON -DENABLE_REGRESSION_TESTING=ON %{?CMAKE_OPTS:%{CMAKE_OPTS}}
 %make_build
 %_openmpi_unload
 
 %install
 %make_install -C %{_target_platform}
 sed -i '1s@env @@' %{buildroot}/%{_datadir}/votca/scripts/inverse/*.py
+sed -i -e '1s@env python@python2@'  %{buildroot}/%{_bindir}/xtp_*
 
 %check
 %_openmpi_load
-make -C %{_target_platform} test CTEST_OUTPUT_ON_FAILURE=1
+make -C %{_target_platform} test CTEST_OUTPUT_ON_FAILURE=1 ARGS="-L xtp"
 %_openmpi_unload
 
 %files
@@ -99,11 +112,14 @@ make -C %{_target_platform} test CTEST_OUTPUT_ON_FAILURE=1
 %doc tools/NOTICE
 %{_bindir}/votca_*
 %{_bindir}/csg_*
+%{_bindir}/xtp_*
 %{_libdir}/libvotca_*.so.*
 %{_mandir}/man1/votca_*.*
 %{_mandir}/man1/csg_*.*
+%{_mandir}/man1/xtp_*.*
 %{_mandir}/man7/votca-*.7*
 %{_datadir}/votca
+%{_datadir}/doc/votca/*.pdf
 
 %files devel
 %{_includedir}/votca/
