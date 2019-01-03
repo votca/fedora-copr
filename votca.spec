@@ -17,6 +17,7 @@ Source5:        https://github.com/votca/csgapps/archive/v%{version}%{?_rc}.tar.
 Source6:        https://github.com/votca/xtp/archive/v%{version}%{?_rc}.tar.gz#/%{name}-xtp-%{version}%{?_rc}.tar.gz
 
 Patch0:         https://patch-diff.githubusercontent.com/raw/votca/xtp/pull/191.diff
+Patch1:         https://patch-diff.githubusercontent.com/raw/votca/xtp/pull/194.diff
 
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
@@ -40,6 +41,7 @@ BuildRequires:  texlive-sidecap
 BuildRequires:  texlive-bclogo
 BuildRequires:  texlive-mdframed
 BuildRequires:  texlive-braket
+BuildRequires:  tex(latex)
 BuildRequires:  graphviz
 BuildRequires:  hdf5-devel
 BuildRequires:  lammps
@@ -84,18 +86,14 @@ for i in tools csg csg-tutorials csg-manual csgapps xtp; do
 done
 sed -i -e '1s@env python@python3@' -e '/default=1e-5/s/1e-5/2e-5/g' tools/scripts/votca_compare.in
 %patch0 -d xtp -p1
+%patch1 -d xtp -p1
 
 %build
-
-#bug in inkscape https://github.com/votca/xtp/issues/189
-%ifnarch s390x aarch64
-%global CMAKE_OPTS -DBUILD_XTP_MANUAL=ON
-%endif
-
+# load openmpi, so that cmake can find mdrun_openmpi for testing
 %_openmpi_load
 mkdir %{_target_platform}
 pushd %{_target_platform}
-%{cmake3} .. -DCMAKE_BUILD_TYPE=Release -DWITH_RC_FILES=OFF -DENABLE_TESTING=ON -DBUILD_CSGAPPS=ON -DBUILD_CSG_MANUAL=ON -DBUILD_XTP=ON -DENABLE_REGRESSION_TESTING=ON %{?CMAKE_OPTS:%{CMAKE_OPTS}}
+%{cmake3} .. -DCMAKE_BUILD_TYPE=Release -DWITH_RC_FILES=OFF -DENABLE_TESTING=ON -DBUILD_CSGAPPS=ON -DBUILD_CSG_MANUAL=ON -DBUILD_XTP=ON -DENABLE_REGRESSION_TESTING=ON -DBUILD_XTP_MANUAL=ON
 %make_build
 %_openmpi_unload
 
