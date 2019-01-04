@@ -1,3 +1,5 @@
 votca-*.tar.gz
 votca-*.src.rpm
+*.diff
+*.patch
 *~
