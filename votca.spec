@@ -88,6 +88,9 @@ sed -i -e '1s@env python@python3@' -e '/default=1e-5/s/1e-5/2e-5/g' tools/script
 %patch0 -d xtp -p1
 %patch1 -d xtp -p1
 
+# create latex.fmt before manual generation does it in parallel and might have a raise condition
+mktexfmt latex.fmt
+
 %build
 # load openmpi, so that cmake can find mdrun_openmpi for testing
 %_openmpi_load
