@@ -18,6 +18,7 @@ Source6:        https://github.com/votca/xtp/archive/v%{version}%{?_rc}.tar.gz#/
 
 Patch0:         https://patch-diff.githubusercontent.com/raw/votca/xtp/pull/191.diff
 Patch1:         https://patch-diff.githubusercontent.com/raw/votca/xtp/pull/194.diff
+Patch2:         https://patch-diff.githubusercontent.com/raw/votca/tools/pull/90.diff
 
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
@@ -87,6 +88,7 @@ done
 sed -i -e '1s@env python@python3@' -e '/default=1e-5/s/1e-5/2e-5/g' tools/scripts/votca_compare.in
 %patch0 -d xtp -p1
 %patch1 -d xtp -p1
+%patch2 -d tools -p1
 
 # create latex.fmt before manual generation does it in parallel and might have a raise condition
 mktexfmt latex.fmt
@@ -107,7 +109,7 @@ sed -i -e '1s@env python@python2@'  %{buildroot}/%{_bindir}/xtp_*
 
 %check
 %_openmpi_load
-make -C %{_target_platform} test CTEST_OUTPUT_ON_FAILURE=1 ARGS="-L xtp"
+make -C %{_target_platform} test CTEST_OUTPUT_ON_FAILURE=1 ARGS="-R imc"
 %_openmpi_unload
 
 %files
