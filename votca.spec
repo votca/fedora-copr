@@ -20,7 +20,7 @@ Patch0:         https://patch-diff.githubusercontent.com/raw/votca/xtp/pull/191.
 Patch1:         https://patch-diff.githubusercontent.com/raw/votca/xtp/pull/194.diff
 Patch2:         https://patch-diff.githubusercontent.com/raw/votca/tools/pull/90.diff
 Patch3:         https://patch-diff.githubusercontent.com/raw/votca/csg/pull/298.diff
-Patch4:         https://github.com/votca/xtp/commit/633da7b1b37a0458c8beb476f71bfad34b261935.diff
+Patch4:         https://patch-diff.githubusercontent.com/raw/votca/xtp/pull/196.diff
 
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
