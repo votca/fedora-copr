@@ -95,6 +95,7 @@ sed -i -e '1s@env python@python3@' -e '/default=1e-5/s/1e-5/2e-5/g' tools/script
 %patch2 -d tools -p1
 %patch3 -d csg -p1
 %patch4 -d xtp -p1
+%global _default_patch_fuzz 2
 %patch5 -d csg -p1
 %patch6 -d csgapps -p1
 
