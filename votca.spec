@@ -21,6 +21,8 @@ Patch1:         https://patch-diff.githubusercontent.com/raw/votca/xtp/pull/194.
 Patch2:         https://patch-diff.githubusercontent.com/raw/votca/tools/pull/90.diff
 Patch3:         https://patch-diff.githubusercontent.com/raw/votca/csg/pull/298.diff
 Patch4:         https://patch-diff.githubusercontent.com/raw/votca/xtp/pull/196.diff
+Patch5:         https://patch-diff.githubusercontent.com/raw/votca/csg/pull/303.diff
+Patch6:         https://patch-diff.githubusercontent.com/raw/votca/csgapps/pull/14.diff
 
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
@@ -91,9 +93,10 @@ sed -i -e '1s@env python@python3@' -e '/default=1e-5/s/1e-5/2e-5/g' tools/script
 %patch0 -d xtp -p1
 %patch1 -d xtp -p1
 %patch2 -d tools -p1
-#patch3 -d csg -p1
+%patch3 -d csg -p1
 %patch4 -d xtp -p1
-
+%patch5 -d csg -p1
+%patch6 -d csgapps -p1
 
 # create latex.fmt before manual generation does it in parallel and might have a raise condition
 mktexfmt latex.fmt
