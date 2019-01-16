@@ -1,4 +1,4 @@
-%global _rcname rc1
+%global _rcname rc2
 %global _rc _%%_rcname
 
 Name:           votca
@@ -15,14 +15,6 @@ Source3:        https://github.com/votca/csg-tutorials/archive/v%{version}%{?_rc
 Source4:        https://github.com/votca/csg-manual/archive/v%{version}%{?_rc}.tar.gz#/%{name}-csg-manual-%{version}%{?_rc}.tar.gz
 Source5:        https://github.com/votca/csgapps/archive/v%{version}%{?_rc}.tar.gz#/%{name}-csgapps-%{version}%{?_rc}.tar.gz
 Source6:        https://github.com/votca/xtp/archive/v%{version}%{?_rc}.tar.gz#/%{name}-xtp-%{version}%{?_rc}.tar.gz
-
-Patch0:         https://patch-diff.githubusercontent.com/raw/votca/xtp/pull/191.diff
-Patch1:         https://patch-diff.githubusercontent.com/raw/votca/xtp/pull/194.diff
-Patch2:         https://patch-diff.githubusercontent.com/raw/votca/tools/pull/90.diff
-Patch3:         https://patch-diff.githubusercontent.com/raw/votca/csg/pull/298.diff
-Patch4:         https://patch-diff.githubusercontent.com/raw/votca/xtp/pull/196.diff
-Patch5:         https://patch-diff.githubusercontent.com/raw/votca/csg/pull/303.diff
-Patch6:         https://patch-diff.githubusercontent.com/raw/votca/csgapps/pull/14.diff
 
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
@@ -89,15 +81,6 @@ coarse-graining of various systems. The core is written in C++.
 for i in tools csg csg-tutorials csg-manual csgapps xtp; do
   rmdir $i && mv $i-%{version}%{?_rc} $i;
 done
-sed -i -e '1s@env python@python3@' -e '/default=1e-5/s/1e-5/2e-5/g' tools/scripts/votca_compare.in
-%patch0 -d xtp -p1
-%patch1 -d xtp -p1
-%patch2 -d tools -p1
-%patch3 -d csg -p1
-%patch4 -d xtp -p1
-%global _default_patch_fuzz 2
-%patch5 -d csg -p1
-%patch6 -d csgapps -p1
 
 # create latex.fmt before manual generation does it in parallel and might have a raise condition
 mktexfmt latex.fmt
@@ -107,7 +90,7 @@ mktexfmt latex.fmt
 %_openmpi_load
 mkdir %{_target_platform}
 pushd %{_target_platform}
-%{cmake3} .. -DCMAKE_BUILD_TYPE=Release -DWITH_RC_FILES=OFF -DENABLE_TESTING=ON -DBUILD_CSGAPPS=ON -DBUILD_CSG_MANUAL=ON -DBUILD_XTP=ON -DENABLE_REGRESSION_TESTING=ON -DBUILD_XTP_MANUAL=ON -DNPROCS=2
+%{cmake3} .. -DCMAKE_BUILD_TYPE=Release -DWITH_RC_FILES=OFF -DENABLE_TESTING=ON -DBUILD_CSGAPPS=ON -DBUILD_CSG_MANUAL=ON -DBUILD_XTP=ON -DENABLE_REGRESSION_TESTING=ON -DBUILD_XTP_MANUAL=ON -DREGRESSIONTEST_TOLERANCE="2e-5"
 %make_build
 %_openmpi_unload
 
