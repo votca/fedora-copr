@@ -81,6 +81,7 @@ coarse-graining of various systems. The core is written in C++.
 for i in tools csg csg-tutorials csg-manual csgapps xtp; do
   rmdir $i && mv $i-%{version}%{?_rc} $i;
 done
+sed -i -e '1s@env python@python3@' tools/scripts/votca_compare.in
 
 # create latex.fmt before manual generation does it in parallel and might have a raise condition
 mktexfmt latex.fmt
