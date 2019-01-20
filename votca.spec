@@ -1,4 +1,4 @@
-%global _rcname rc2
+%global _rcname rc3
 %global _rc _%%_rcname
 
 Name:           votca
