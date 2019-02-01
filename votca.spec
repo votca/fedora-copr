@@ -3,7 +3,7 @@
 
 Name:           votca
 Version:        1.5
-Release:        0.1%{?_rcname}%{?dist}
+Release:        1%{?_rcname}%{?dist}
 Summary:        VOTCA tools library
 Group:          Applications/Engineering
 License:        ASL 2.0
@@ -17,6 +17,7 @@ Source5:        https://github.com/votca/csgapps/archive/v%{version}%{?_rc}.tar.
 Source6:        https://github.com/votca/xtp/archive/v%{version}%{?_rc}.tar.gz#/%{name}-xtp-%{version}%{?_rc}.tar.gz
 Source7:        https://github.com/votca/ctp/archive/v%{version}%{?_rc}.tar.gz#/%{name}-ctp-%{version}%{?_rc}.tar.gz
 Patch0:         https://github.com/votca/csgapps/pull/18.diff
+Patch1:         https://github.com/votca/ctp/pull/109.diff
 
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
@@ -25,6 +26,7 @@ BuildRequires:  fftw-devel
 BuildRequires:  eigen3-devel
 BuildRequires:  boost-devel
 BuildRequires:  gromacs-devel
+BuildRequires:  gsl-devel
 BuildRequires:  perl-generators
 BuildRequires:  txt2tags
 BuildRequires:  sqlite-devel
@@ -85,6 +87,7 @@ for i in tools csg csg-tutorials csg-manual csgapps xtp ctp; do
 done
 sed -i -e '1s@env python@python3@' tools/scripts/votca_compare.in
 %patch0 -d csgapps -p1
+%patch1 -d ctp -p1
 
 # create latex.fmt before manual generation does it in parallel and might have a raise condition
 mktexfmt latex.fmt
