@@ -1,5 +1,5 @@
-%global _rcname rc3
-%global _rc _%%_rcname
+#global _rcname rc3
+#global _rc _%%_rcname
 
 Name:           votca
 Version:        1.5
@@ -15,6 +15,8 @@ Source3:        https://github.com/votca/csg-tutorials/archive/v%{version}%{?_rc
 Source4:        https://github.com/votca/csg-manual/archive/v%{version}%{?_rc}.tar.gz#/%{name}-csg-manual-%{version}%{?_rc}.tar.gz
 Source5:        https://github.com/votca/csgapps/archive/v%{version}%{?_rc}.tar.gz#/%{name}-csgapps-%{version}%{?_rc}.tar.gz
 Source6:        https://github.com/votca/xtp/archive/v%{version}%{?_rc}.tar.gz#/%{name}-xtp-%{version}%{?_rc}.tar.gz
+Source7:        https://github.com/votca/ctp/archive/v%{version}%{?_rc}.tar.gz#/%{name}-ctp-%{version}%{?_rc}.tar.gz
+Patch0:         https://github.com/votca/csgapps/pull/18.diff
 
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
@@ -77,11 +79,12 @@ a package intended to reduce the amount of routine work when doing systematic
 coarse-graining of various systems. The core is written in C++.
 
 %prep
-%setup -q -a 1 -a 2 -a 3 -a 4 -a 5 -a 6 -n %{name}-%{version}%{?_rc}
-for i in tools csg csg-tutorials csg-manual csgapps xtp; do
+%setup -q -a 1 -a 2 -a 3 -a 4 -a 5 -a 6 -a 7 -n %{name}-%{version}%{?_rc}
+for i in tools csg csg-tutorials csg-manual csgapps xtp ctp; do
   rmdir $i && mv $i-%{version}%{?_rc} $i;
 done
 sed -i -e '1s@env python@python3@' tools/scripts/votca_compare.in
+%patch0 -d csgapps -p1
 
 # create latex.fmt before manual generation does it in parallel and might have a raise condition
 mktexfmt latex.fmt
@@ -91,7 +94,7 @@ mktexfmt latex.fmt
 %_openmpi_load
 mkdir %{_target_platform}
 pushd %{_target_platform}
-%{cmake3} .. -DCMAKE_BUILD_TYPE=Release -DWITH_RC_FILES=OFF -DENABLE_TESTING=ON -DBUILD_CSGAPPS=ON -DBUILD_CSG_MANUAL=ON -DBUILD_XTP=ON -DENABLE_REGRESSION_TESTING=ON -DBUILD_XTP_MANUAL=ON -DREGRESSIONTEST_TOLERANCE="2e-5"
+%{cmake3} .. -DCMAKE_BUILD_TYPE=Release -DWITH_RC_FILES=OFF -DENABLE_TESTING=ON -DBUILD_CSGAPPS=ON -DBUILD_CSG_MANUAL=ON -DBUILD_XTP=ON -DENABLE_REGRESSION_TESTING=ON -DBUILD_XTP_MANUAL=ON -DBUILD_CTP=ON -DBUILD_CTP_MANUAL=ON -DREGRESSIONTEST_TOLERANCE="2e-5"
 %make_build
 %_openmpi_unload
 
@@ -111,10 +114,16 @@ make -C %{_target_platform} test CTEST_OUTPUT_ON_FAILURE=1 ARGS="-E \(imc\|cma\|
 %{_bindir}/votca_*
 %{_bindir}/csg_*
 %{_bindir}/xtp_*
+%{_bindir}/ctp_*
+%{_bindir}/moo_*
+%{_bindir}/kmc_*
 %{_libdir}/libvotca_*.so.*
 %{_mandir}/man1/votca_*.*
 %{_mandir}/man1/csg_*.*
 %{_mandir}/man1/xtp_*.*
+%{_mandir}/man1/ctp_*.*
+%{_mandir}/man1/moo_*.*
+%{_mandir}/man1/kmc_*.*
 %{_mandir}/man7/votca-*.7*
 %{_datadir}/votca
 %{_datadir}/doc/votca/*.pdf
