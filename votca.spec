@@ -108,7 +108,7 @@ sed -i -e '1s@env python@python2@'  %{buildroot}/%{_bindir}/xtp_*
 
 %check
 %_openmpi_load
-make -C %{_target_platform} test CTEST_OUTPUT_ON_FAILURE=1 ARGS="-E \(multi\)"
+make -C %{_target_platform} test CTEST_OUTPUT_ON_FAILURE=1
 %_openmpi_unload
 
 %files
