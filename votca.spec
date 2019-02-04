@@ -37,11 +37,13 @@ BuildRequires:  texlive-a4wide
 BuildRequires:  texlive-xstring 
 BuildRequires:  inkscape
 BuildRequires:  transfig
-BuildRequires:  texlive-units
-BuildRequires:  texlive-sidecap
+%if 0%{?fedora}
 BuildRequires:  texlive-bclogo
-BuildRequires:  texlive-mdframed
 BuildRequires:  texlive-braket
+BuildRequires:  texlive-mdframed
+BuildRequires:  texlive-sidecap
+BuildRequires:  texlive-units
+%endif
 BuildRequires:  tex(latex)
 BuildRequires:  graphviz
 BuildRequires:  hdf5-devel
@@ -49,7 +51,7 @@ BuildRequires:  lammps
 BuildRequires:  libxc-devel
 BuildRequires:  ceres-solver-devel
 BuildRequires:  ImageMagick
-BuildRequires:  ghostscript-tools-dvipdf
+BuildRequires:  /usr/bin/dvipdf
 BuildRequires:  gromacs
 BuildRequires:  gromacs-openmpi
 BuildRequires:  openmpi-devel
