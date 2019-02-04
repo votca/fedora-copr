@@ -92,7 +92,7 @@ sed -i -e '1s@env python@python3@' tools/scripts/votca_compare.in
 %patch1 -d ctp -p1
 
 %if 0%{?rhel}
-find -name CMakeLists.txt -exec sed -i '/Boost/s/1.57.0/1.53.0/' +
+find -name CMakeLists.txt -exec sed -i '/Boost/s/1.57.0/1.53.0/' {} +
 %endif
 
 # create latex.fmt before manual generation does it in parallel and might have a raise condition
