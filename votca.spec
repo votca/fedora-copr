@@ -34,7 +34,7 @@ BuildRequires:  texlive
 BuildRequires:  texlive-appendix
 BuildRequires:  texlive-wrapfig
 BuildRequires:  texlive-a4wide
-BuildRequires:  texlive-xstring 
+BuildRequires:  texlive-xstring
 BuildRequires:  inkscape
 BuildRequires:  transfig
 %if 0%{?fedora}
@@ -60,6 +60,7 @@ BuildRequires:  python2
 BuildRequires:  python-unversioned-command
 %endif
 BuildRequires:  gnuplot
+BuildRequires:  psmisc
 BuildRequires:  octave
 
 %description
