@@ -18,6 +18,8 @@ Source6:        https://github.com/votca/xtp/archive/v%{version}%{?_rc}.tar.gz#/
 Source7:        https://github.com/votca/ctp/archive/v%{version}%{?_rc}.tar.gz#/%{name}-ctp-%{version}%{?_rc}.tar.gz
 Patch0:         https://github.com/votca/csgapps/pull/18.diff
 Patch1:         https://github.com/votca/ctp/pull/109.diff
+Patch2:         https://github.com/votca/tools/pull/108.diff
+Patch2:         https://github.com/votca/csg/pull/333.diff
 
 BuildRequires:  gcc-c++
 BuildRequires:  cmake3
@@ -91,6 +93,8 @@ done
 sed -i -e '1s@env python@python3@' tools/scripts/votca_compare.in
 %patch0 -d csgapps -p1
 %patch1 -d ctp -p1
+%patch2 -d tools -p1
+%patch3 -d csg -p1
 
 %if 0%{?rhel}
 find -name CMakeLists.txt -exec sed -i '/Boost/s/1.57.0/1.53.0/' {} +
