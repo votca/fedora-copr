@@ -19,7 +19,7 @@ Source7:        https://github.com/votca/ctp/archive/v%{version}%{?_rc}.tar.gz#/
 Patch0:         https://github.com/votca/csgapps/pull/18.diff
 Patch1:         https://github.com/votca/ctp/pull/109.diff
 Patch2:         https://github.com/votca/tools/pull/108.diff
-Patch2:         https://github.com/votca/csg/pull/333.diff
+Patch3:         https://github.com/votca/csg/pull/333.diff
 
 BuildRequires:  gcc-c++
 BuildRequires:  cmake3
