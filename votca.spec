@@ -20,6 +20,7 @@ Patch0:         https://github.com/votca/csgapps/pull/18.diff
 Patch1:         https://github.com/votca/ctp/pull/109.diff
 Patch2:         https://github.com/votca/tools/pull/108.diff
 Patch3:         https://github.com/votca/csg/pull/333.diff
+Patch4:         https://github.com/votca/xtp/pull/234.diff
 
 BuildRequires:  gcc-c++
 BuildRequires:  cmake3
@@ -95,6 +96,7 @@ sed -i -e '1s@env python@python3@' tools/scripts/votca_compare.in
 %patch1 -d ctp -p1
 %patch2 -d tools -p1
 %patch3 -d csg -p1
+%patch4 -d xtp -p1
 
 %if 0%{?rhel}
 find -name CMakeLists.txt -exec sed -i '/Boost/s/1.57.0/1.53.0/' {} +
