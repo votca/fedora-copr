@@ -38,13 +38,12 @@ BuildRequires:  texlive-a4wide
 BuildRequires:  texlive-xstring
 BuildRequires:  inkscape
 BuildRequires:  transfig
-%if 0%{?fedora}
 BuildRequires:  texlive-bclogo
 BuildRequires:  texlive-braket
 BuildRequires:  texlive-mdframed
 BuildRequires:  texlive-sidecap
 BuildRequires:  texlive-units
-%endif
+BuildRequires:  texlive-type1cm
 BuildRequires:  tex(latex)
 BuildRequires:  graphviz
 BuildRequires:  hdf5-devel
