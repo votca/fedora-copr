@@ -49,6 +49,8 @@ BuildRequires:  graphviz
 BuildRequires:  hdf5-devel
 BuildRequires:  lammps
 BuildRequires:  python3-espresso-openmpi
+BuildRequires:  python3-cma
+BuildRequires:  valgrind
 BuildRequires:  libxc-devel
 BuildRequires:  ImageMagick
 BuildRequires:  /usr/bin/dvipdf
@@ -132,5 +134,6 @@ make -C %{_target_platform} test CTEST_OUTPUT_ON_FAILURE=1 ARGS="-E \(spce_cma_s
 %files devel
 %{_includedir}/votca/
 %{_libdir}/libvotca_*.so
+%{_libdir}/cmake/VOTCA_*
 
 %changelog
