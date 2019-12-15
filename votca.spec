@@ -21,6 +21,7 @@ Patch3:         https://github.com/votca/csg/pull/473.patch
 Patch4:         https://github.com/votca/xtp/pull/345.patch
 Patch5:         https://github.com/votca/xtp/pull/347.patch
 Patch6:         https://github.com/votca/csg-tutorials/pull/71.patch 
+Patch7:         https://github.com/votca/csg/pull/478.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  cmake3
@@ -92,13 +93,17 @@ done
 %patch4 -d xtp -p1
 %patch5 -d xtp -p1
 %patch6 -d csg-tutorials -p1
+%patch7 -d csg -p1
 
 # create latex.fmt before manual generation does it in parallel and might have a raise condition
 mktexfmt latex.fmt
 
 %build
-# for espresso module
-# export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib64/python3.7/site-packages/openmpi/espressomd
+# save some memory
+%ifarch %x86 %arm
+%global _smp_mflags -j1
+%endif
+
 # load openmpi, so that cmake can find mdrun_openmpi for testing
 %_openmpi_load
 mkdir %{_target_platform}
@@ -113,8 +118,12 @@ sed -i '1s@env @@' %{buildroot}/%{_datadir}/votca/scripts/inverse/*.py
 sed -i -e '1s@env python@python2@'  %{buildroot}/%{_bindir}/xtp_*
 
 %check
+%ifarch %arm ppc64le
+# https://github.com/votca/xtp/issues/340
+%global testargs ARGS='-E unit_test_gw'
+%endif
 %_openmpi_load
-make -C %{_target_platform} test CTEST_OUTPUT_ON_FAILURE=1 ARGS="-E \(spce_cma_simple\)"
+make -C %{_target_platform} test CTEST_OUTPUT_ON_FAILURE=1 %{?testargs:%{testargs}}
 %_openmpi_unload
 
 %files
