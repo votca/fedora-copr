@@ -100,7 +100,7 @@ mktexfmt latex.fmt
 
 %build
 # save some memory
-%ifarch %x86 %arm
+%ifarch %ix86 %arm
 %global _smp_mflags -j1
 %endif
 
