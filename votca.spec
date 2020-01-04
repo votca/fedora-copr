@@ -23,6 +23,7 @@ Patch5:         https://github.com/votca/xtp/pull/347.patch
 Patch6:         https://github.com/votca/csg-tutorials/pull/71.patch 
 Patch7:         https://github.com/votca/csg/pull/478.patch
 Patch8:         https://github.com/votca/csg/pull/494.patch
+Patch9:         https://github.com/votca/xtp/pull/356.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  cmake3
@@ -96,21 +97,23 @@ done
 %patch6 -d csg-tutorials -p1
 %patch7 -d csg -p1
 %patch8 -d csg -p1
+%patch9 -d xtp -p1
 
 # create latex.fmt before manual generation does it in parallel and might have a raise condition
 mktexfmt latex.fmt
 
 %build
 # save some memory
-%ifarch %ix86 %arm
+%ifarch %ix86 %arm aarch64
 %global _smp_mflags -j1
+%global extra_cmake_opts -DENABLE_HIGH_MEMORY_TESTS=OFF
 %endif
 
 # load openmpi, so that cmake can find mdrun_openmpi for testing
 %_openmpi_load
 mkdir %{_target_platform}
 pushd %{_target_platform}
-%{cmake3} .. -DCMAKE_BUILD_TYPE=Release -DWITH_RC_FILES=OFF -DENABLE_TESTING=ON -DBUILD_CSGAPPS=ON -DBUILD_CSG_MANUAL=ON -DBUILD_XTP=ON -DENABLE_REGRESSION_TESTING=ON -DREGRESSIONTEST_TOLERANCE="2e-5" -DHDF5_C_COMPILER_EXECUTABLE=/usr/bin/h5cc
+%{cmake3} .. -DCMAKE_BUILD_TYPE=Release -DWITH_RC_FILES=OFF -DENABLE_TESTING=ON -DBUILD_CSGAPPS=ON -DBUILD_CSG_MANUAL=ON -DBUILD_XTP=ON -DENABLE_REGRESSION_TESTING=ON -DREGRESSIONTEST_TOLERANCE="2e-5" -DHDF5_C_COMPILER_EXECUTABLE=/usr/bin/h5cc %{?extra_cmake_opts}
 %make_build
 %_openmpi_unload
 
@@ -125,7 +128,7 @@ sed -i -e '1s@env python@python2@'  %{buildroot}/%{_bindir}/xtp_*
 %global testargs ARGS='-E unit_test_gw'
 %endif
 %_openmpi_load
-make -C %{_target_platform} test CTEST_OUTPUT_ON_FAILURE=1 %{?testargs:%{testargs}}
+make -C %{_target_platform} test CTEST_OUTPUT_ON_FAILURE=1 %{?testargs}
 %_openmpi_unload
 
 %files
