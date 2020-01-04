@@ -121,8 +121,6 @@ pushd %{_target_platform}
 
 %install
 %make_install -C %{_target_platform}
-sed -i '1s@env @@' %{buildroot}/%{_datadir}/votca/scripts/inverse/*.py
-sed -i -e '1s@env python@python2@'  %{buildroot}/%{_bindir}/xtp_*
 
 %check
 %ifarch %arm ppc64le
