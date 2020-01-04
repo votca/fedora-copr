@@ -37,24 +37,26 @@ BuildRequires:  txt2tags
 BuildRequires:  texlive
 BuildRequires:  texlive-appendix
 BuildRequires:  texlive-wrapfig
-BuildRequires:  texlive-a4wide
 BuildRequires:  texlive-xstring
 BuildRequires:  inkscape
 BuildRequires:  transfig
-BuildRequires:  texlive-bclogo
-BuildRequires:  texlive-braket
-BuildRequires:  texlive-mdframed
-BuildRequires:  texlive-sidecap
-BuildRequires:  texlive-units
 BuildRequires:  texlive-type1cm
 BuildRequires:  tex(latex)
 BuildRequires:  graphviz
 BuildRequires:  hdf5-devel
 BuildRequires:  lammps
+%if 0%{?fedora}
 BuildRequires:  python3-espresso-openmpi
 BuildRequires:  python3-cma
-BuildRequires:  valgrind
 BuildRequires:  libxc-devel
+BuildRequires:  texlive-a4wide
+BuildRequires:  texlive-bclogo
+BuildRequires:  texlive-braket
+BuildRequires:  texlive-mdframed
+BuildRequires:  texlive-sidecap
+BuildRequires:  texlive-units
+%endif
+BuildRequires:  valgrind
 BuildRequires:  ImageMagick
 BuildRequires:  /usr/bin/dvipdf
 BuildRequires:  gromacs
@@ -113,7 +115,7 @@ mktexfmt latex.fmt
 %_openmpi_load
 mkdir %{_target_platform}
 pushd %{_target_platform}
-%{cmake3} .. -DCMAKE_BUILD_TYPE=Release -DWITH_RC_FILES=OFF -DENABLE_TESTING=ON -DBUILD_CSGAPPS=ON -DBUILD_CSG_MANUAL=ON -DBUILD_XTP=ON -DENABLE_REGRESSION_TESTING=ON -DREGRESSIONTEST_TOLERANCE="2e-5" -DHDF5_C_COMPILER_EXECUTABLE=/usr/bin/h5cc %{?extra_cmake_opts}
+%{cmake3} .. -DCMAKE_BUILD_TYPE=Release -DWITH_RC_FILES=OFF -DENABLE_TESTING=ON -DBUILD_CSGAPPS=ON -DBUILD_CSG_MANUAL=ON -DBUILD_XTP=ON -DENABLE_REGRESSION_TESTING=ON -DREGRESSIONTEST_TOLERANCE="2e-5" -DHDF5_C_COMPILER_EXECUTABLE=/usr/bin/h5cc %{?extra_cmake_opts} %{?rhel:-DBUILD_CSG_MANUAL=OFF -DBUILD_XTP=OFF}
 %make_build
 %_openmpi_unload
 
@@ -136,14 +138,16 @@ make -C %{_target_platform} test CTEST_OUTPUT_ON_FAILURE=1 %{?testargs}
 %doc tools/NOTICE
 %{_bindir}/votca_*
 %{_bindir}/csg_*
-%{_bindir}/xtp_*
 %{_libdir}/libvotca_*.so.*
 %{_mandir}/man1/votca_*.*
 %{_mandir}/man1/csg_*.*
-%{_mandir}/man1/xtp_*.*
 %{_mandir}/man7/votca-*.7*
 %{_datadir}/votca
+%if 0%{?fedora}
+%{_bindir}/xtp_*
+%{_mandir}/man1/xtp_*.*
 %{_datadir}/doc/votca/*.pdf
+%endif
 
 %files devel
 %{_includedir}/votca/
