@@ -23,7 +23,8 @@ Patch5:         https://github.com/votca/xtp/pull/347.patch
 Patch6:         https://github.com/votca/csg-tutorials/pull/71.patch 
 Patch7:         https://github.com/votca/csg/pull/478.patch
 Patch8:         https://github.com/votca/csg/pull/494.patch
-Patch9:         https://github.com/votca/xtp/pull/356.patch
+Patch9:         https://github.com/votca/xtp/pull/357.patch
+Patch10:        https://github.com/votca/xtp/pull/356.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  cmake3
@@ -100,6 +101,7 @@ done
 %patch7 -d csg -p1
 %patch8 -d csg -p1
 %patch9 -d xtp -p1
+%patch10 -d xtp -p1
 
 # create latex.fmt before manual generation does it in parallel and might have a raise condition
 mktexfmt latex.fmt
