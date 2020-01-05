@@ -36,7 +36,7 @@ BuildRequires:  perl-generators
 BuildRequires:  txt2tags
 BuildRequires:  hdf5-devel
 BuildRequires:  lammps
-BuildRequires   python3
+BuildRequires:  python3
 %if 0%{?fedora}
 BuildRequires:  python3-espresso-openmpi
 BuildRequires:  python3-cma
