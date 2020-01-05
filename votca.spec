@@ -103,8 +103,10 @@ done
 %patch9 -d xtp -p1
 %patch10 -d xtp -p1
 
+%if 0%{?fedora}
 # create latex.fmt before manual generation does it in parallel and might have a raise condition
 mktexfmt latex.fmt
+%endif
 
 %build
 # save some memory
