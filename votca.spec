@@ -41,7 +41,6 @@ BuildRequires:  python3
 %if 0%{?fedora}
 BuildRequires:  python3-espresso-openmpi
 BuildRequires:  python3-cma
-BuildRequires:  libxc-devel
 BuildRequires:  texlive
 BuildRequires:  texlive-appendix
 BuildRequires:  texlive-wrapfig
@@ -59,6 +58,7 @@ BuildRequires:  graphviz
 BuildRequires:  ImageMagick
 BuildRequires:  /usr/bin/dvipdf
 %endif
+BuildRequires:  libxc-devel
 BuildRequires:  valgrind
 BuildRequires:  gromacs
 BuildRequires:  gromacs-openmpi
@@ -119,7 +119,7 @@ mktexfmt latex.fmt
 %_openmpi_load
 mkdir %{_target_platform}
 pushd %{_target_platform}
-%{cmake3} .. -DCMAKE_BUILD_TYPE=Release -DWITH_RC_FILES=OFF -DENABLE_TESTING=ON -DBUILD_CSGAPPS=ON -DBUILD_CSG_MANUAL=ON -DBUILD_XTP=ON -DENABLE_REGRESSION_TESTING=ON -DREGRESSIONTEST_TOLERANCE="2e-5" -DHDF5_C_COMPILER_EXECUTABLE=/usr/bin/h5cc %{?extra_cmake_opts} %{?rhel:-DBUILD_CSG_MANUAL=OFF -DBUILD_XTP=OFF}
+%{cmake3} .. -DCMAKE_BUILD_TYPE=Release -DWITH_RC_FILES=OFF -DENABLE_TESTING=ON -DBUILD_CSGAPPS=ON -DBUILD_CSG_MANUAL=ON -DBUILD_XTP=ON -DENABLE_REGRESSION_TESTING=ON -DREGRESSIONTEST_TOLERANCE="2e-5" -DHDF5_C_COMPILER_EXECUTABLE=/usr/bin/h5cc %{?extra_cmake_opts} %{?rhel:-DBUILD_CSG_MANUAL=OFF}
 %make_build
 %_openmpi_unload
 
