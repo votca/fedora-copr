@@ -14,6 +14,7 @@ Source4:        https://github.com/votca/csg-manual/archive/v%{uversion}.tar.gz#
 Source5:        https://github.com/votca/csgapps/archive/v%{uversion}.tar.gz#/%{name}-csgapps-%{uversion}.tar.gz
 Source6:        https://github.com/votca/xtp/archive/v%{uversion}.tar.gz#/%{name}-xtp-%{uversion}.tar.gz
 Source7:        https://github.com/votca/xtp-tutorials/archive/v%{uversion}.tar.gz#/%{name}-xtp-tutorials-%{uversion}.tar.gz
+Patch0:         https://github.com/votca/xtp/pull/381.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  cmake3
@@ -80,6 +81,7 @@ coarse-graining of various systems. The core is written in C++.
 for i in tools csg csg-tutorials csg-manual csgapps xtp xtp-tutorials; do
   rmdir $i && mv $i-%{uversion} $i;
 done
+%patch0 -p1 -d xtp
 
 %if 0%{?fedora}
 # create latex.fmt before manual generation does it in parallel and might have a raise condition
