@@ -1,6 +1,6 @@
 Name:           votca
-Version:        1.6~rc1
-%global         uversion 1.6_rc1
+Version:        1.6~rc2
+%global         uversion 1.6_rc2
 Release:        1%{?dist}
 Summary:        VOTCA tools library
 Group:          Applications/Engineering
@@ -14,17 +14,6 @@ Source4:        https://github.com/votca/csg-manual/archive/v%{uversion}.tar.gz#
 Source5:        https://github.com/votca/csgapps/archive/v%{uversion}.tar.gz#/%{name}-csgapps-%{uversion}.tar.gz
 Source6:        https://github.com/votca/xtp/archive/v%{uversion}.tar.gz#/%{name}-xtp-%{uversion}.tar.gz
 Source7:        https://github.com/votca/xtp-tutorials/archive/v%{uversion}.tar.gz#/%{name}-xtp-tutorials-%{uversion}.tar.gz
-Patch0:         https://github.com/votca/tools/pull/196.patch
-Patch1:         https://github.com/votca/tools/pull/197.patch
-Patch2:         https://github.com/votca/tools/pull/199.patch
-Patch3:         https://github.com/votca/csg/pull/473.patch
-Patch4:         https://github.com/votca/xtp/pull/345.patch
-Patch5:         https://github.com/votca/xtp/pull/347.patch
-Patch6:         https://github.com/votca/csg-tutorials/pull/71.patch 
-Patch7:         https://github.com/votca/csg/pull/478.patch
-Patch8:         https://github.com/votca/csg/pull/494.patch
-Patch9:         https://github.com/votca/xtp/pull/357.patch
-Patch10:        https://github.com/votca/xtp/pull/356.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  cmake3
@@ -91,17 +80,6 @@ coarse-graining of various systems. The core is written in C++.
 for i in tools csg csg-tutorials csg-manual csgapps xtp xtp-tutorials; do
   rmdir $i && mv $i-%{uversion} $i;
 done
-%patch0 -d tools -p1
-%patch1 -d tools -p1
-%patch2 -d tools -p1
-%patch3 -d csg -p1
-%patch4 -d xtp -p1
-%patch5 -d xtp -p1
-%patch6 -d csg-tutorials -p1
-%patch7 -d csg -p1
-%patch8 -d csg -p1
-%patch9 -d xtp -p1
-%patch10 -d xtp -p1
 
 %if 0%{?fedora}
 # create latex.fmt before manual generation does it in parallel and might have a raise condition
