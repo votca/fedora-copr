@@ -123,7 +123,9 @@ make -C %{_target_platform} test CTEST_OUTPUT_ON_FAILURE=1 %{?testargs}
 %{_datadir}/votca
 %{_bindir}/xtp_*
 %{_mandir}/man1/xtp_*.*
+%if 0%{?fedora}
 %{_datadir}/doc/votca/*.pdf
+%endif
 
 %files devel
 %{_includedir}/votca/
