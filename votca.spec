@@ -99,7 +99,7 @@ mktexfmt latex.fmt
 %_openmpi_load
 mkdir %{_target_platform}
 pushd %{_target_platform}
-%{cmake3} .. -DCMAKE_BUILD_TYPE=Release -DWITH_RC_FILES=OFF -DENABLE_TESTING=ON -DBUILD_CSGAPPS=ON -DBUILD_CSG_MANUAL=ON -DBUILD_XTP=ON -DENABLE_REGRESSION_TESTING=ON -DREGRESSIONTEST_TOLERANCE="2e-5" -DHDF5_C_COMPILER_EXECUTABLE=/usr/bin/h5cc %{?extra_cmake_opts} %{?rhel:-DBUILD_CSG_MANUAL=OFF}
+%{cmake3} .. -DCMAKE_BUILD_TYPE=Release -DWITH_RC_FILES=OFF -DENABLE_TESTING=ON -DBUILD_CSGAPPS=ON -DBUILD_CSG_MANUAL=ON -DBUILD_XTP=ON -DENABLE_REGRESSION_TESTING=ON -DREGRESSIONTEST_TOLERANCE="2e-5" -DHDF5_C_COMPILER_EXECUTABLE=/usr/bin/h5cc %{?extra_cmake_opts} %{?rhel:-DBUILD_CSG_MANUAL=OFF -DCMAKE_DISABLE_FIND_PACKAGE_MDRUN_MPI=ON}
 %make_build
 %_openmpi_unload
 
@@ -107,10 +107,6 @@ pushd %{_target_platform}
 %make_install -C %{_target_platform}
 
 %check
-%ifarch %arm ppc64le
-# https://github.com/votca/xtp/issues/340
-%global testargs ARGS='-E unit_test_gw'
-%endif
 %_openmpi_load
 make -C %{_target_platform} test CTEST_OUTPUT_ON_FAILURE=1 %{?testargs}
 %_openmpi_unload
