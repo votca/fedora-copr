@@ -3,7 +3,7 @@ Version:        2022~rc1
 %global         uversion 2022-rc.1
 %global         sover 2022
 Release:        1%{?dist}
-Summary:        VOTCA tools library
+Summary:        Versatile Object-oriented Toolkit for Coarse-graining Applications
 License:        ASL 2.0
 URL:            http://www.votca.org
 Source0:        https://github.com/votca/votca/archive/v%{uversion}.tar.gz#/%{name}-%{uversion}.tar.gz
