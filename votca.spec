@@ -1,42 +1,3 @@
-Name:           votca
-Version:        2022~rc1
-%global         uversion 2022-rc.1
-%global         sover 2022
-Release:        1%{?dist}
-Summary:        Versatile Object-oriented Toolkit for Coarse-graining Applications
-License:        ASL 2.0
-URL:            http://www.votca.org
-Source0:        https://github.com/votca/votca/archive/v%{uversion}.tar.gz#/%{name}-%{uversion}.tar.gz
-
-BuildRequires:  gcc-c++
-BuildRequires:  cmake3
-BuildRequires:  expat-devel
-BuildRequires:  fftw-devel
-BuildRequires:  eigen3-devel
-BuildRequires:  boost-devel
-BuildRequires:  gromacs-devel
-BuildRequires:  perl-generators
-BuildRequires:  hdf5-devel
-BuildRequires:  lammps
-BuildRequires:  python3
-BuildRequires:  python3-pytest
-BuildRequires:  python3-cma
-BuildRequires:  python3-lxml
-BuildRequires:  python3-h5py
-BuildRequires:  libxc-devel
-BuildRequires:  libecpint-devel
-BuildRequires:  libint2-devel
-BuildRequires:  valgrind
-BuildRequires:  gromacs
-BuildRequires:  gromacs-openmpi
-%ifnarch s390x
-# only used for testing
-BuildRequires:  python3-espresso-openmpi
-%endif
-BuildRequires:  openmpi-devel
-BuildRequires:  gnuplot
-BuildRequires:  psmisc
-
 %global with_xtp 1
 # libint2 used by xtp is broken on 32-bit archs
 # https://github.com/evaleev/libint/issues/196
@@ -45,8 +6,57 @@ BuildRequires:  psmisc
 %global with_xtp 0
 %endif
 
+%global uversion 2022-rc.2
+%global sover 2022
+
+%global votca_desc \
+VOTCA is a software package which focuses on the analysis of molecular \
+dynamics data, the development of systematic coarse-graining techniques as \
+well as methods used for simulating microscopic charge (and exciton) transport \
+in disordered semiconductors.
+
+Name:           votca
+Version:        2022~rc2
+Release:        2%{?dist}
+Summary:        Versatile Object-oriented Toolkit for Coarse-graining Applications
+License:        ASL 2.0
+URL:            http://www.votca.org
+Source0:        https://github.com/votca/votca/archive/v%{uversion}.tar.gz#/%{name}-%{uversion}.tar.gz
+
+BuildRequires:  gcc-c++
+BuildRequires:  fdupes
+BuildRequires:  cmake3
+BuildRequires:  expat-devel
+BuildRequires:  fftw-devel
+BuildRequires:  eigen3-devel
+BuildRequires:  boost-devel
+BuildRequires:  gromacs-devel
+BuildRequires:  perl-generators
+BuildRequires:  hdf5-devel
+BuildRequires:  python3
+BuildRequires:  python3-lxml
+BuildRequires:  python3-h5py
+BuildRequires:  libxc-devel
+BuildRequires:  libecpint-devel
+BuildRequires:  libint2-devel
+# mpi packages only used for testing
+BuildRequires:  gromacs-openmpi
+%ifnarch s390x
+BuildRequires:  python3-espresso-openmpi
+%endif
+BuildRequires:  openmpi-devel
+
+#used for testing only
+BuildRequires:  gromacs
+BuildRequires:  lammps
+BuildRequires:  python3-cma
+BuildRequires:  python3-pytest
+BuildRequires:  gnuplot
+BuildRequires:  psmisc
+
+
 Requires:   %{name}-common = %{version}-%{release}
-Requires:   %{name}-libs = %{version}-%{release}
+Requires:   %{name}-libs%{?_isa} = %{version}-%{release}
 %if %{with_xtp}
 Requires:   %{name}-common-xtp = %{version}-%{release}
 %endif
@@ -57,20 +67,14 @@ Provides:       votca-csg = %version-%release
 Obsoletes:      votca-xtp <= 2022~rc1
 Provides:       votca-xtp = %version-%release
 
-%global votca_desc \
-VOTCA is a software package which focuses on the analysis of molecular \
-dynamics data, the development of systematic coarse-graining techniques as \
-well as methods used for simulating microscopic charge (and exciton) transport \
-in disordered semiconductors.
-
 %description
 %{votca_desc}
 
 %package devel
 Summary:        Development headers and libraries for votca
 Requires:       pkgconfig
-Requires:       %{name} = %{version}-%{release}
-Requires:       %{name}-libs = %{version}-%{release}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
 # votca header include these headers
 Requires:       boost-devel
 Requires:       expat-devel
@@ -119,7 +123,7 @@ package.
 %package csg-tutorials
 Summary:    Architecture independent csg tutorial files for VOTCA
 BuildArch:  noarch
-Requires:   %{name} = %{version}-%{release}
+Requires:   %{name}%{?_isa} = %{version}-%{release}
 
 %description csg-tutorials
 %{votca_desc}
@@ -132,7 +136,7 @@ for the VOTCA package.
 %package xtp-tutorials
 Summary:    Architecture independent xtp tutorial files for VOTCA
 BuildArch:  noarch
-Requires:   %{name} = %{version}-%{release}
+Requires:   %{name}%{?_isa} = %{version}-%{release}
 
 %description xtp-tutorials
 %{votca_desc}
@@ -155,7 +159,7 @@ parts of the VOTCA package.
 
 %package bash
 Summary:    Bash completion for VOTCA
-Requires:   %{name} = %{version}-%{release}
+Requires:   %{name}%{?_isa} = %{version}-%{release}
 Requires:   bash-completion
 BuildArch:  noarch
 Obsoletes:  votca-csg-bash <= 2022~rc1
@@ -170,14 +174,11 @@ This package contains bash completion support for the VOTCA package.
 %setup -q -n %{name}-%{uversion}
 
 %build
-# load openmpi, so that cmake can find mdrun_openmpi for testing
+# load openmpi, so that cmake can find mdrun_openmpi for testing only
 %_openmpi_load
-# not a 100% sure why this is needed
+# not a 100% sure why this is needed, but otherwise espressomd cannot be found
 export PYTHONPATH="${MPI_PYTHON3_SITEARCH}${PYTHONPATH:+:}${PYTHONPATH}"
 
-# libint2 used by xtp is broken on 32-bit archs
-# https://github.com/evaleev/libint/issues/196
-# https://github.com/votca/xtp/issues/652
 %{cmake} -DCMAKE_BUILD_TYPE=Release -DINSTALL_RC_FILES=OFF -DENABLE_TESTING=ON -DBUILD_CSGAPPS=ON \
  -DBUILD_XTP=%{with_xtp} \
   -DENABLE_REGRESSION_TESTING=ON -DHDF5_C_COMPILER_EXECUTABLE=/usr/bin/h5cc -DINJECT_MARCH_NATIVE=OFF
@@ -187,8 +188,10 @@ export PYTHONPATH="${MPI_PYTHON3_SITEARCH}${PYTHONPATH:+:}${PYTHONPATH}"
 %install
 %cmake_install
 # Install bash completion file
-mkdir -p %{buildroot}%{_datadir}/bash_completion
-mv %{buildroot}%{_datadir}/votca/rc/csg-completion.bash %{buildroot}%{_datadir}/bash_completion/votca
+mkdir -p %{buildroot}%{_datadir}/bash-completion/completions
+mv %{buildroot}%{_datadir}/votca/rc/csg-completion.bash %{buildroot}%{_datadir}/bash-completion/completions/votca
+
+%fdupes %{buildroot}%{_prefix}
 
 %check
 %_openmpi_load
@@ -198,16 +201,15 @@ export PYTHONPATH="${MPI_PYTHON3_SITEARCH}${PYTHONPATH:+:}${PYTHONPATH}"
 
 %files
 %{_bindir}/{votca,csg,xtp}_*
-%{_mandir}/man1/{votca,csg,xtp}_*.*
+%{_mandir}/man1/{votca,csg,xtp}_*.1*
 %{_mandir}/man7/votca-*.7*
 
 %files common
-%doc CHANGELOG.rst tools/NOTICE README.rst
-%license tools/LICENSE
-%{_datadir}/votca
+%doc CHANGELOG.rst NOTICE.rst README.rst
+%license LICENSE
+%{_datadir}/votca/
 %exclude %{_datadir}/votca/*-tutorials/
-%exclude %{_datadir}/votca/xtp
-
+%exclude %{_datadir}/votca/xtp/
 
 %files csg-tutorials
 %{_datadir}/votca/csg-tutorials/
@@ -217,12 +219,12 @@ export PYTHONPATH="${MPI_PYTHON3_SITEARCH}${PYTHONPATH:+:}${PYTHONPATH}"
 %{_datadir}/votca/xtp-tutorials/
 
 %files common-xtp
-%license tools/LICENSE
-%{_datadir}/votca/xtp
+%license LICENSE
+%{_datadir}/votca/xtp/
 %endif
 
 %files libs
-%license tools/LICENSE
+%license LICENSE
 %{_libdir}/libvotca_*.so.%{sover}
 
 %files devel
@@ -231,6 +233,12 @@ export PYTHONPATH="${MPI_PYTHON3_SITEARCH}${PYTHONPATH:+:}${PYTHONPATH}"
 %{_libdir}/cmake/VOTCA_*
 
 %files bash
-%{_datadir}/bash_completion/votca
+%{_datadir}/bash-completion/completions/votca
 
 %changelog
+* Wed Dec 29 2021 Christoph Junghans <junghans@votca.org> - 2022~rc2-2
+- Incorporated changes from package review (bug #2032487#c7)
+
+* Thu Dec 23 2021 Christoph Junghans <junghans@votca.org> - 2022~rc2-1
+- initial import (bug #2032487)
+
